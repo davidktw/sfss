@@ -21,6 +21,7 @@ cli -> sfss: send access token over
 sfss -> gh: Check received access token\nPOST https://api.github.com/applications/<CLIENT_ID>/token\nBasic Auth: <CLIENT_ID>:<CLIENT_SECRET>\nHTTP BODY: {"access_token": "<ACCESS_TOKEN>"}
 gh --> sfss: Return registered client_id
 sfss -> sfss: Verify the client_id is the same
+sfss -> sfss: Generate new AES256 secret key if user is new.\nStore/Update user (unique_id, access_token, secret_key) into SQLite DB,\ndepending if the user is newly added or existing.\nExisting user will only update the access_token, retain the existing secret_key\nto access old files uploaded previously.
 sfss --> cli: Successful registration
 cli -> cli: save the access token into a local\nconfiguration file for future operations
 cli --> user: Show successful registration msg.
