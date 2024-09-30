@@ -1,0 +1,21 @@
+title Registration of New User
+
+actor "User" as user
+participant "Common Line Tool" as cli
+participant "Browser" as browser
+participant "Secure File Storage System" as sfss
+participant "GitHub" as gh
+
+user -> cli: sfss register
+
+cli -> gh: POST https://github.com/login/device/code?clientid=<CLIENTID>&scope=user
+gh --> cli: RESPONSE device_code=<DEVICE_CODE>&expires_in=<TIME>&interval=<SECS_LEFT>\n&user_code=<USER_CODE>&verification_uri=<VERIFICATION_URL>
+cli -> cli: parse the response and show\ninstruction for user to open browser to\nHTTPS://<VERIFICATION_URL
+cli <-> gh: keep on probing at POST 'https://github.com/login/oauth/access_token\n?client_id=<CLIENT_ID>&device_code=<DEVICE_CODE>&grant_type=urn:ietf:params:oauth:grant-type:device_code'\nuntil an access token is returned.
+cli <-> gh: repeat probing
+user -> browser: user uses browser to access\nGET https://github.com/login/device
+browser --> user: Show the device activation page to enter <USER_CODE>\nand allow the authorisation.
+cli -> gh: repeat probing
+gh --> cli: an access token is returned in the response
+cli -> cli: save the access token into a local\nconfiguration file for future operations
+cli --> user: Show successful registration msg.
