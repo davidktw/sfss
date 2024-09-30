@@ -1,0 +1,17 @@
+title Delete File
+
+actor "User" as user
+participant "Common Line Tool" as cli
+participant "Browser" as browser
+participant "Secure File Storage System" as sfss
+participant "GitHub" as gh
+
+user -> cli: sfss delete <FILENAME>
+cli -> cli : retrieve access token\nfrom configuration
+cli -> sfss: POST delete file command and <ACCESS_TOKEN> as query parameter
+sfss -> gh: Check received access token\nPOST https://api.github.com/applications/<CLIENT_ID>/token\nBasic Auth: <CLIENT_ID>:<CLIENT_SECRET>\nHTTP BODY: {"access_token": "<ACCESS_TOKEN>"}
+gh --> sfss: Return registered client_id
+sfss -> sfss: Verify the client_id is the same in SQLiteDB
+sfss -> sfss: Search for (client_id, filename) is found in SQLiteDB,\nget the hash_filename.
+sfss -> sfss: Delete file from local filesystem and also file entry from SQLiteDB.
+sfss --> cli: Delete file success msg
