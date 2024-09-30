@@ -17,10 +17,10 @@ user -> browser: user uses browser to access\nGET https://github.com/login/devic
 browser --> user: Show the device activation page to enter <USER_CODE>\nand allow the authorisation.
 cli -> gh: repeat probing
 gh --> cli: an access token is returned in the response
-cli -> cli: save the access token into a local\nconfiguration file for future operations
 cli -> sfss: send access token over
 sfss -> gh: Check received access token\nPOST https://api.github.com/applications/<CLIENT_ID>/token\nBasic Auth: <CLIENT_ID>:<CLIENT_SECRET>\nHTTP BODY: {"access_token": "<ACCESS_TOKEN>"}
 gh --> sfss: Return registered client_id
 sfss -> sfss: Verify the client_id is the same
 sfss --> cli: Successful registration
+cli -> cli: save the access token into a local\nconfiguration file for future operations
 cli --> user: Show successful registration msg.
