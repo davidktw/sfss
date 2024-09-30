@@ -1,0 +1,16 @@
+title Upload File
+
+actor "User" as user
+participant "Common Line Tool" as cli
+participant "Browser" as browser
+participant "Secure File Storage System" as sfss
+participant "GitHub" as gh
+
+user -> cli: sfss upload <PATH_TO_LOCAL_FILE>
+cli -> cli : retrieve access token\nfrom configuration
+cli -> sfss: POST file content as body\nwith <ACCESS_TOKEN> as query parameter
+sfss -> gh: Check received access token\nPOST https://api.github.com/applications/<CLIENT_ID>/token\nBasic Auth: <CLIENT_ID>:<CLIENT_SECRET>\nHTTP BODY: {"access_token": "<ACCESS_TOKEN>"}
+gh --> sfss: Return registered client_id
+sfss -> sfss: Verify the client_id is the same in SQLiteDB
+sfss -> sfss: Extract the secret key, generate initial IV,\nencrypt the file using AES256 using (secret key, IV),\ngenerate hashed filename and store into the filesystem.\nInsert (USER_ID, SECRET_KEY, IV,  ORIGINAL_FILENAME, HASHED_FILENAME) into SQLiteDB.
+sfss --> cli: Upload file success msg
