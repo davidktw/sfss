@@ -1,0 +1,49 @@
+#!/usr/bin/env perl
+
+use strict;
+use warnings;
+use lib '/opt/sfss/lib';
+use MIME::Base64;
+use LWP::UserAgent;
+use Data::Dumper;
+use CGI;
+use Common;
+use File::Path qw(make_path);
+use Log::Log4perl qw(:easy);
+
+Log::Log4perl::init($SFSS_LOGCONF);
+my $log = Log::Log4perl->get_logger();
+
+my $cgi          = new CGI;
+my $access_token = $cgi->param('access_token') || '';
+
+my $ghobj = github_checktoken($access_token);
+
+print $cgi->header;
+$log->info("$ghobj->{user}{login} upload file");
+if (github_isvalid($ghobj)) {
+  my $userdir = "$SFSS_DATADIR/$ghobj->{user}{id}";
+  eval {
+    local $/;
+    make_path($userdir, {
+      chmod => 0700
+    });
+    my $infh = $cgi->upload('file');
+    my $b64filename = encode_base64($infh);
+    open(my $outfh, ">$userdir/$b64filename");
+    sfss_encrypt_fh($infh, $outfh, $SFSS_COMMON_SECRET.$ghobj->{user}{id});
+    close($outfh);
+    print "File '".$cgi->param('filename')."' successfully uploaded.\n";
+    $log->info("$ghobj->{user}{login} successfully uploaded file '$infh'");
+  };
+  if ($@) {
+    $log->error("$ghobj->{user}{login} failed upload file - $@");
+    print "Failed upload. $@\n";
+  }
+}
+else {
+  $log->error("$ghobj->{user}{login} $ghobj->{message}");
+  print "Failed upload.\n";
+}
+
+# vim: sw=2 st=2 ts=2 et number si

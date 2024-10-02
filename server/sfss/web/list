@@ -1,0 +1,51 @@
+#!/usr/bin/env perl
+
+use strict;
+use warnings;
+use lib '/opt/sfss/lib';
+use MIME::Base64;
+use Data::Dumper;
+use CGI;
+use Common;
+use Log::Log4perl qw(:easy);
+
+Log::Log4perl::init($SFSS_LOGCONF);
+my $log = Log::Log4perl->get_logger();
+
+my $cgi          = new CGI;
+my $access_token = $cgi->param('access_token') || '';
+
+
+my $ghobj = github_checktoken($access_token);
+$log->info("$ghobj->{user}{login} list files");
+print $cgi->header;
+if (github_isvalid($ghobj)) {
+  print "Hi $ghobj->{user}{login},\n";
+  print "below is a list of files available to you.\n";
+  print '='x50,"\n";
+  my $userdir = "$SFSS_DATADIR/$ghobj->{user}{id}";
+  if (-d $userdir) {
+    opendir(my $dh, $userdir);
+    my $num = 0;
+    my @files = map { sprintf("%02d) %s", ++$num, decode_base64($_)) } grep { $_ !~ /^\.+$/ } readdir($dh);
+    closedir($dh);
+    if (@files > 0) {
+      print join("\n", @files), "\n";
+    }
+    else {
+      $log->info("$ghobj->{user}{login} no files");
+      print "No files are currently available.\n";
+    }
+  }
+  else {
+    $log->info("$ghobj->{user}{login} missing directory");
+    print "No files are currently available.\n";
+  }
+  print '='x50,"\n";
+}
+else {
+  $log->error("$ghobj->{user}{login} $ghobj->{message}");
+  print "Failed list. ($ghobj->{message})\n";
+}
+
+# vim: sw=2 st=2 ts=2 et number si

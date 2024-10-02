@@ -1,0 +1,43 @@
+#!/usr/bin/env perl
+
+use strict;
+use warnings;
+use lib '/opt/sfss/lib';
+use MIME::Base64;
+use LWP::UserAgent;
+use JSON::XS;
+use Data::Dumper;
+use CGI;
+use DBI;
+use Common;
+use Log::Log4perl qw(:easy);
+
+Log::Log4perl::init($SFSS_LOGCONF);
+my $log = Log::Log4perl->get_logger();
+
+my $cgi          = new CGI;
+my $access_token = $cgi->param('access_token') || '';
+my $filename     = $cgi->param('filename') || '';
+
+my $ghobj = github_checktoken($access_token);
+$log->info("$ghobj->{user}{login} delete file");
+print $cgi->header;
+if (github_isvalid($ghobj)) {
+  my $userdir     = "$SFSS_DATADIR/$ghobj->{user}{id}";
+  my $b64filename = encode_base64($filename, '');
+  if ($filename && -f "$userdir/$b64filename") {
+    $log->info("$ghobj->{user}{login} delete file '$filename'");
+    unlink("$userdir/$b64filename") or die($!);
+    print "File '$filename' successfully deleted.\n";
+  }
+  else {
+    $log->warn("$ghobj->{user}{login} delete file '$filename' not found");
+    print "File '$filename' is not found.\n";
+  }
+}
+else {
+  $log->error("$ghobj->{user}{login} $ghobj->{message}");
+  print "Failed delete file.\n";
+}
+
+# vim: sw=2 st=2 ts=2 et number si

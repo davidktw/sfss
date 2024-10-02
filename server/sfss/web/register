@@ -1,0 +1,34 @@
+#!/usr/bin/env perl
+
+use strict;
+use warnings;
+use lib '/opt/sfss/lib';
+use LWP::UserAgent;
+use Data::Dumper;
+use CGI;
+use Common;
+use Log::Log4perl qw(:easy);
+
+Log::Log4perl::init($SFSS_LOGCONF);
+my $log = Log::Log4perl->get_logger();
+
+my $cgi          = new CGI;
+my $access_token = $cgi->param('access_token') || '';
+
+my $ghobj = github_checktoken($access_token);
+
+print $cgi->header;
+$log->info("$ghobj->{user}{login} register");
+if (github_isvalid($ghobj)) {
+  print "Hi $ghobj->{user}{login},\n";
+  print "You have successfully registered.\n";
+  print "You can now use the upload, download, delete, list\n";
+  print "operations to manage your files.\n";
+  $log->info("$ghobj->{user}{login} successfully registered");
+}
+else {
+  $log->error("$ghobj->{user}{login} registration failed");
+  print "Failed registration.\n";
+}
+
+# vim: sw=2 st=2 ts=2 et number si
