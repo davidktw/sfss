@@ -131,3 +131,35 @@ a2enmod qos
 	</VirtualHost>
 </IfModule>
 ```
+
+## How to use
+Once the installation are done. Make sure the apache web server is running
+
+### Register the first user
+```
+# ./sfss.pl register
+==================
+REGISTRATION STEPS
+==================
+1) Please open the browser to https://github.com/login/device .
+2) Sign in to your github account, and enter the following code: C123-4567 .
+3) Authorize the access to the app sfss to complete the registration.
+
+Pending activation. (left 894 secs)
+```
+
+Follow the instruction above, open the browser to `https://github.com/login/device`.
+Login your account, then enter the code as displayed, similar to the sample above.
+Authorised the access to the app and wait for the client to complete the registration.
+
+Now this user would have been registered to the app and other commands can be executed
+```
+./sfss.pl
+Usage:
+  ./sfss.pl register            - Register using your own github account
+                                  to use secure file storage system(SFSS).
+  ./sfss.pl list                - List the uploaded files in SFSS.
+  ./sfss.pl upload <filename>   - Upload file to SFSS.
+  ./sfss.pl download <filename> - Download file from SFSS.
+  ./sfss.pl delete <filename>   - Delete file in SFSS.
+```
