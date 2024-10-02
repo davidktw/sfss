@@ -43,6 +43,31 @@ If need be, AWS Secret Manager can be used for credentials management for better
 Rate limiting can be achieved using Apache2 module `mod_qos` to control the concurrency and rate of requests. This functionality is not part of the code feature.
 
 ## Installation
+
+### Github OAuth App
+A GitHub Oauth app will be required for OAuth authentication of users allowed to use the SFSS application.
+#### Configuration
+1) After login to your own Github account, go to `https://github.com/settings/apps`.
+2) Click on `OAuth App` on the left panel, and click on `New OAuth App` button on the right.
+3) The application name will need to be `sfss`.
+4) Check `Enable Device Flow`
+5) Click on `Register application` button
+
+Once the application is created, click into it
+1) Copy the Client ID
+2) Generate a new Client Secret and copy it too
+
+Edit the following json file that is copied to `/opt/sfss/config/config`
+Except the `APPNAME` property that need to be `sfss` as configured in the `Github OAuth App`, the rest should be coped from `Github OAuth App` developer console.
+```
+{
+  "APPNAME": "sfss",
+  "CLIENTID": "<PASTE YOUR CLIENT ID>",
+  "CLIENTSECRET": "<PASTE YOUR CLIENT SECRET>",
+  "SFSS_COMMON_SECRET": "<ENTER YOUR PREFERRED COMMON FILE ENCRYPTION PASSPHRASE>"
+}
+```
+
 ### Client & Server
 #### Required Linux Packages
 ```
@@ -54,19 +79,37 @@ Client application is a Perl script, hence it can be deployed in any systems tha
 #### Installation
 Copy the `client/sfss.pl` file to linux system. As long as there is a `perl` interpreter and also the above perl modules installed, it can be run from any directory `./sfss.pl <commands>`
 
+Configure the `sfss.pl` code as follows. At the top of the code will contain the following codes
+```
+my $SFSS_PREFIX                = 'https://<IP/HOSTNAME OF APACHE SERVER WEB>/sfss';
+...
+my $GITHUB_CLIENTID            = '<PASTE YOUR CLIENT ID>';
+...
+```
+Make sure the contents in these 2 variables are properly set.
+
 ### Server
 As the server application is integrated with Apache2 web server, the root deployment will be found at `/opt/sfss`.
 
 #### Installation
 Copy the entire `server/sfss` to `/opt/sfss`
-run the following commands
+then run the following commands
 ```
+sudo mkdir -p /opt/sfss/data
 sudo chown -R www-data:www-data /opt/sfss
 sudo find /opt/sfss -type d -exec chmod 0700 {} \;
 sudo find /opt/sfss -type f -exec chmod 0600 {} \;
 sudo find /opt/sfss/web -type f -exec chmod 0700 {} \;
+sudo mkdir -p /var/log/sfss
+sudo chown www-data:www-data /var/log/sfss
+sudo chmod 0700 /var/log/sfss
 ```
-HTTPS site can be enabled using `a2site default-ssl.conf`
+HTTPS site can be enabled using
+```
+a2ensite default-ssl.conf
+a2enmod ssl
+a2enmod qos
+```
 
 ```
 <IfModule mod_ssl.c>
