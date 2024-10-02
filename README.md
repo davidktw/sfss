@@ -41,3 +41,50 @@ If need be, AWS Secret Manager can be used for credentials management for better
 
 ### Rate Limiting
 Rate limiting can be achieved using Apache2 module `mod_qos` to control the concurrency and rate of requests. This functionality is not part of the code feature.
+
+## Installation
+### Client & Server
+#### Required Linux Packages
+```
+apt install libcrypt-cbc-perl libjson-xs-perl libcgi-pm-perl apache2 libapache2-mod-qos liblog-log4perl-perl
+```
+
+### Client
+Client application is a Perl script, hence it can be deployed in any systems that support the perl interpreter.
+#### Installation
+Copy the `client/sfss.pl` file to linux system. As long as there is a `perl` interpreter and also the above perl modules installed, it can be run from any directory `./sfss.pl <commands>`
+
+### Server
+As the server application is integrated with Apache2 web server, the root deployment will be found at `/opt/sfss`.
+
+#### Installation
+Copy the entire `server/sfss` to `/opt/sfss`
+run the following commands
+```
+sudo chown -R www-data:www-data /opt/sfss
+sudo find /opt/sfss -type d -exec chmod 0700 {} \;
+sudo find /opt/sfss -type f -exec chmod 0600 {} \;
+sudo find /opt/sfss/web -type f -exec chmod 0700 {} \;
+```
+HTTPS site can be enabled using `a2site default-ssl.conf`
+
+```
+<IfModule mod_ssl.c>
+	<VirtualHost _default_:443>
+		ServerAdmin webmaster@localhost
+
+		DocumentRoot /var/www/html
+
+...
+        # ADDED FOR SFSS
+        # ====================================================
+		ScriptAlias "/sfss/" "/opt/sfss/web/"
+        <Directory "/opt/sfss/web/">
+            AllowOverride None
+            Options +ExecCGI -MultiViews +SymLinksIfOwnerMatch
+            Require all granted
+        </Directory>
+        # ====================================================
+	</VirtualHost>
+</IfModule>
+```
