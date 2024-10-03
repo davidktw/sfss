@@ -17,7 +17,7 @@ my $SFSS_DELETE_URL            = "$SFSS_PREFIX/delete";
 my $SFSS_UPLOAD_URL            = "$SFSS_PREFIX/upload";
 my $SFSS_DOWNLOAD_URL          = "$SFSS_PREFIX/download";
 my $SFSS_LIST_URL              = "$SFSS_PREFIX/list";
-my $GITHUB_CLIENTID            = 'Ov23lidvKkL4sRDB9ke6';
+my $GITHUB_CLIENTID            = 'xxxxxxxxxxxxxxxxxxxxx';
 my $GITHUB_DEVICECODE_URL      = 'https://github.com/login/device/code';
 my $GITHUB_GET_ACCESSTOKEN_URL = 'https://github.com/login/oauth/access_token';
 
