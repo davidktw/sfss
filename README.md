@@ -107,8 +107,8 @@ sudo chmod 0700 /var/log/sfss
 HTTPS site can be enabled using
 ```
 a2ensite default-ssl.conf
+a2enmod cgid
 a2enmod ssl
-a2enmod qos
 ```
 
 ```
