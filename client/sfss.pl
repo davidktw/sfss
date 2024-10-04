@@ -11,13 +11,13 @@ use File::Path qw(make_path);
 
 my $SFSS_CONFIG_PATH           = "$ENV{HOME}/.sfss";
 my $SFSS_PROP_PATH             = "$SFSS_CONFIG_PATH/config";
-my $SFSS_PREFIX                = 'https://ul22044.local/sfss';
+my $SFSS_PREFIX                = 'https://___SFSS_SERVER_HOSTNAME___/sfss';
 my $SFSS_REGISTER_URL          = "$SFSS_PREFIX/register";
 my $SFSS_DELETE_URL            = "$SFSS_PREFIX/delete";
 my $SFSS_UPLOAD_URL            = "$SFSS_PREFIX/upload";
 my $SFSS_DOWNLOAD_URL          = "$SFSS_PREFIX/download";
 my $SFSS_LIST_URL              = "$SFSS_PREFIX/list";
-my $GITHUB_CLIENTID            = 'xxxxxxxxxxxxxxxxxxxxx';
+my $GITHUB_CLIENTID            = '___GITHUB_CLIENTID___';
 my $GITHUB_DEVICECODE_URL      = 'https://github.com/login/device/code';
 my $GITHUB_GET_ACCESSTOKEN_URL = 'https://github.com/login/oauth/access_token';
 

@@ -1,6 +1,6 @@
 {
-  "APPNAME": "sfss",
-  "CLIENTID": "xxxxxxxxxxxxxxxxxxxxxx",
-  "CLIENTSECRET": "xxxxxxxxxxxxxxxxxxxxxxxxxxxx",
-  "SFSS_COMMON_SECRET": "xxxxxxxxxxxxxxxxxxxxxxxx"
+  "APPNAME": "___APPNAME___",
+  "CLIENTID": "___CLIENTID___",
+  "CLIENTSECRET": "___CLIENTSECRET___",
+  "SFSS_COMMON_SECRET": "___COMMONSECRET___"
 }
