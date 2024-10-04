@@ -26,13 +26,13 @@ Server side is a web application built using Perl programming language server vi
 User will authentication and authorised via GitHub OAuth. Both the client and server will check against the Github OAuth to ensure the client has registered and for every access, the access token is checked via Github API to ensure it is authorised.
 
 ### Logging and comments
-Comments and logging are put in place for easy debugging. For logging Log4Perl, a cousin port from Log4J is used.
+Comments and logging are put in place for easy debugging. For logging Log4Perl, a cousin port of Log4J is used.
 
 ### Networking
 Data in transit are protected using proper HTTPS(SSL/TLS) transport between the client and server. In the testing environment, domain name verification is deliberately disabled at the client end, but in proper deployment where the server will be served public CA signed X.509 certificates, domain name verification can be enabled easily.
 
 ### Configuration
-Configuration files are used for logging configurations, crendetials etc, so that they will be kept out of the codebase and changed for actual deployments.
+Configuration files are used for logging configurations, credentials etc, so that they will be kept out of the codebase and changed for actual deployments.
 
 ### Security
 As each user can be uniquely identified after authentication against the Github OAuth API, each user will contribute using it's unique ID to a common secret passphrase to form the actual passphrase for symmetric key encryption via AES. Hence different users even when uploaded the exact file will not encrypt to the same encrypted payload.
@@ -42,8 +42,7 @@ If need be, AWS Secret Manager can be used for credentials management for better
 ### Rate Limiting
 Rate limiting can be achieved using Apache2 module `mod_qos` to control the concurrency and rate of requests. This functionality is not part of the code feature.
 
-## Installation
-
+## Github Account Configuration
 ### Github OAuth App
 A GitHub Oauth app will be required for OAuth authentication of users allowed to use the SFSS application.
 #### Configuration
@@ -57,7 +56,7 @@ Once the application is created, click into it
 1) Copy the Client ID
 2) Generate a new Client Secret and copy it too
 
-## Docker Installation
+## Docker Installation and Deployment
 1) SSH to a Linux host.
 2) Clone the git repository to working directory.
    ```
@@ -128,13 +127,15 @@ sudo mkdir -p /var/log/sfss
 sudo chown www-data:www-data /var/log/sfss
 sudo chmod 0700 /var/log/sfss
 ```
-HTTPS site can be enabled using
+HTTPS site and CGI can be enabled using
 ```
 a2ensite default-ssl.conf
 a2enmod ssl
 a2enmod cgid
 ```
 
+Edit the `/etc/apache2/sites-enabled/default-ssl.conf`
+by adding the extra configurations as shown below
 ```
 <IfModule mod_ssl.c>
 	<VirtualHost _default_:443>
@@ -169,6 +170,9 @@ Except the `APPNAME` property that need to be `sfss` as configured in the `Githu
 
 ## How to use
 Once the installation are done. Make sure the apache web server is running
+```
+systemctl start apache2
+```
 
 ### Register the first user
 ```
