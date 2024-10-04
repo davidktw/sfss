@@ -8,7 +8,6 @@ use LWP::UserAgent;
 use JSON::XS;
 use Data::Dumper;
 use CGI;
-use DBI;
 use Common;
 use Log::Log4perl qw(:easy);
 
