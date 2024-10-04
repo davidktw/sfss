@@ -57,6 +57,31 @@ Once the application is created, click into it
 1) Copy the Client ID
 2) Generate a new Client Secret and copy it too
 
+## Docker Installation
+1) SSH to a Linux host.
+2) Clone the git repository to working directory.
+   ```
+   git clone 'https://github.com/davidktw/sfss.git'
+   ```
+3) Copy the `secrets.txt.sample` file to `secrets.txt` file.
+4) Edit the `secrets.txt` file and fill up those `FILL-IN-...` variables with your own approporiate values.
+5) Build both the client and server containers
+   ```
+   ./build-sfss-client.sh
+   ./build-sfss-server.sh
+   ```
+6) Start up SFSS server first
+   ```
+   ./start-sfss-server.sh
+   ```
+7) Start up SFSS client
+   ```
+   ./start-sfss-client.sh
+   ```
+8) Now in the sfss client console client, you may use SFSS
+
+## Manual Installation and Deployment
+### Client & Server
 Edit the following json file that is copied to `/opt/sfss/config/config`
 Except the `APPNAME` property that need to be `sfss` as configured in the `Github OAuth App`, the rest should be coped from `Github OAuth App` developer console.
 ```
@@ -68,10 +93,9 @@ Except the `APPNAME` property that need to be `sfss` as configured in the `Githu
 }
 ```
 
-### Client & Server
 #### Required Linux Packages
 ```
-sudo apt install libcrypt-cbc-perl libjson-xs-perl libcgi-pm-perl apache2 libapache2-mod-qos liblog-log4perl-perl libwww-perl
+sudo apt install libcrypt-cbc-perl libjson-xs-perl libcgi-pm-perl apache2 liblog-log4perl-perl libwww-perl
 ```
 
 ### Client
@@ -107,8 +131,8 @@ sudo chmod 0700 /var/log/sfss
 HTTPS site can be enabled using
 ```
 a2ensite default-ssl.conf
-a2enmod cgid
 a2enmod ssl
+a2enmod cgid
 ```
 
 ```
@@ -130,6 +154,17 @@ a2enmod ssl
         # ====================================================
 	</VirtualHost>
 </IfModule>
+```
+
+Edit the following json file that is copied to `/opt/sfss/config/config`
+Except the `APPNAME` property that need to be `sfss` as configured in the `Github OAuth App`, the rest should be coped from `Github OAuth App` developer console.
+```
+{
+  "APPNAME": "sfss",
+  "CLIENTID": "<PASTE YOUR CLIENT ID>",
+  "CLIENTSECRET": "<PASTE YOUR CLIENT SECRET>",
+  "SFSS_COMMON_SECRET": "<ENTER YOUR PREFERRED COMMON FILE ENCRYPTION PASSPHRASE>"
+}
 ```
 
 ## How to use
