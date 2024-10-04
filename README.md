@@ -69,11 +69,11 @@ Once the application is created, click into it
    ./build-sfss-client.sh
    ./build-sfss-server.sh
    ```
-6) Start up SFSS server first
+6) Start up SFSS server first (container will be started detached)
    ```
    ./start-sfss-server.sh
    ```
-7) Start up SFSS client
+7) Start up SFSS client (container will be started interactive with console)
    ```
    ./start-sfss-client.sh
    ```
