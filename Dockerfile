@@ -1,9 +1,13 @@
+##################################################
+# SFSS CLIENT
+##################################################
 FROM ubuntu:24.04 as sfss-client
 WORKDIR /opt
 
 COPY client/* /opt/sfss-client/
 
-RUN apt-get -y update && apt-get -y install libcrypt-cbc-perl libjson-xs-perl libcgi-pm-perl liblog-log4perl-perl libwww-perl iputils-ping curl vim telnet
+RUN apt-get -y update && apt-get -y install libcrypt-cbc-perl libjson-xs-perl libcgi-pm-perl liblog-log4perl-perl libwww-perl
+#RUN apt-get -y update && iputils-ping curl vim telnet
 RUN echo 'export PATH="$PATH:/opt/sfss-client"' > /etc/profile.d/02-sfss-client.sh
 RUN --mount=type=secret,id=mysecrets \
   set -a; . /run/secrets/mysecrets; \
@@ -11,13 +15,17 @@ RUN --mount=type=secret,id=mysecrets \
 
 CMD bash -l
 
+##################################################
+# SFSS SERVER
+##################################################
 FROM ubuntu:24.04 as sfss-server
 WORKDIR /opt
 
 COPY server/sfss /opt/sfss
 COPY server/apache2conf/sfss.conf /etc/apache2/sites-available/
 
-RUN apt-get -y update && apt-get -y install libcrypt-cbc-perl libjson-xs-perl libcgi-pm-perl liblog-log4perl-perl libwww-perl apache2 vim
+RUN apt-get -y update && apt-get -y install libcrypt-cbc-perl libjson-xs-perl libcgi-pm-perl liblog-log4perl-perl libwww-perl apache2
+#RUN apt-get -y update && iputils-ping curl vim telnet
 RUN \
 	a2enmod ssl; \
 	a2enmod cgid; \
