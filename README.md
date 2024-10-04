@@ -71,7 +71,7 @@ Except the `APPNAME` property that need to be `sfss` as configured in the `Githu
 ### Client & Server
 #### Required Linux Packages
 ```
-sudo apt install libcrypt-cbc-perl libjson-xs-perl libcgi-pm-perl apache2 libapache2-mod-qos liblog-log4perl-perl
+sudo apt install libcrypt-cbc-perl libjson-xs-perl libcgi-pm-perl apache2 libapache2-mod-qos liblog-log4perl-perl libwww-perl
 ```
 
 ### Client
