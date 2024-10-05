@@ -56,7 +56,7 @@ Once the application is created, click into it
 1) Copy the Client ID
 2) Generate a new Client Secret and copy it too
 
-## Docker Compose and Deployment
+## Docker Compose and Deployment (Approach 1)
 1) SSH to a Linux host.
 2) Clone the git repository to working directory.
    ```
@@ -77,7 +77,7 @@ Once the application is created, click into it
    docker compose down
    ```
 
-## Docker Installation and Deployment
+## Docker Installation and Deployment (Approach 2)
 1) SSH to a Linux host.
 2) Clone the git repository to working directory.
    ```
@@ -100,7 +100,7 @@ Once the application is created, click into it
    ```
 8) Now in the sfss client console client, you may use SFSS
 
-## Manual Installation and Deployment
+## Manual Installation and Deployment (Approach 3)
 ### Client & Server
 Edit the following json file that is copied to `/opt/sfss/config/config`
 Except the `APPNAME` property that need to be `sfss` as configured in the `Github OAuth App`, the rest should be coped from `Github OAuth App` developer console.
