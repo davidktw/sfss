@@ -1,0 +1,25 @@
+services:
+
+  sfss-server:
+    image: "sfss-server"
+    container_name: "sfss-server"
+    networks:
+      - sfss-network
+    build:
+      context: .
+      target: "sfss-server"
+
+  sfss-client:
+    image: "sfss-client"
+    container_name: "sfss-client"
+      tty: true
+      stdin_open: true
+    networks:
+      - sfss-network
+    build:
+      context: .
+      target: "sfss-client"
+
+networks:
+  sfss-network:
+    driver: bridge
