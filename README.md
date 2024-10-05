@@ -56,6 +56,27 @@ Once the application is created, click into it
 1) Copy the Client ID
 2) Generate a new Client Secret and copy it too
 
+## Docker Compose and Deployment
+1) SSH to a Linux host.
+2) Clone the git repository to working directory.
+   ```
+   git clone 'https://github.com/davidktw/sfss.git'
+   ```
+3) Copy the `secrets.txt.sample` file to `secrets.txt` file.
+4) Edit the `secrets.txt` file and fill up those `FILL-IN-...` variables with your own approporiate values.
+5) Build both the client and server containers and bring them up online
+   ```
+   docker compose up -d
+   ```
+6) Access the client console
+   ```
+   docker compose exec sfss-client bash -l
+   ```
+7) To remove all the containers
+   ```
+   docker compose down
+   ```
+
 ## Docker Installation and Deployment
 1) SSH to a Linux host.
 2) Clone the git repository to working directory.
