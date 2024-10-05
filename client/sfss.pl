@@ -69,7 +69,7 @@ EOM
   my $starttime = time;
   my $registered;
   $|++;
-  while (time - $starttime < $data{expires_in} ? 10 : 0) {
+  while ((time - $starttime) < $data{expires_in}) {
     my $res = $ua->post($GITHUB_GET_ACCESSTOKEN_URL, {
         client_id   => $GITHUB_CLIENTID,
         device_code => $data{device_code},
