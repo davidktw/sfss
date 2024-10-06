@@ -101,18 +101,6 @@ Once the application is created, click into it
 8) Now in the sfss client console client, you may use SFSS
 
 ## Manual Installation and Deployment (Approach 3)
-### Client & Server
-Edit the following json file that is copied to `/opt/sfss/config/config`
-Except the `APPNAME` property that need to be `sfss` as configured in the `Github OAuth App`, the rest should be coped from `Github OAuth App` developer console.
-```
-{
-  "APPNAME": "sfss",
-  "CLIENTID": "<PASTE YOUR CLIENT ID>",
-  "CLIENTSECRET": "<PASTE YOUR CLIENT SECRET>",
-  "SFSS_COMMON_SECRET": "<ENTER YOUR PREFERRED COMMON FILE ENCRYPTION PASSPHRASE>"
-}
-```
-
 #### Required Linux Packages
 ```
 sudo apt install libcrypt-cbc-perl libjson-xs-perl libcgi-pm-perl apache2 liblog-log4perl-perl libwww-perl
